@@ -10,23 +10,25 @@ body {
 }
 
 .container {
-  text-align: center;
+  overflow-x: auto; /* Adiciona rolagem horizontal para tabelas grandes */
 }
 
 .title {
   margin-bottom: 2rem;
   font-size: 2rem;
   color: #000000;
+  text-align: center;
 }
 
 .usinas-table {
-  width: 80%;
-  margin: 0 auto;
+  width: 100%;
+  margin: 1.5rem 0;
   border-collapse: collapse;
-  font-size: 1rem;
+  font-size: 0.9rem;
   text-align: left;
-  background-color: #ffffff; 
+  background-color: #ffffff;
   color: #000000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adiciona sombra para destacar a tabela */
 }
 
 .usinas-table th,
@@ -36,23 +38,25 @@ body {
 }
 
 .usinas-table th {
-  background-color: #ffffff;
+  background-color: #f4f4f4; /* Fundo cinza claro para o cabeçalho */
   font-weight: bold;
   text-align: center;
-  color: #000000;
+  position: sticky; /* Fixa o cabeçalho ao rolar a tabela */
+  top: 0;
+  z-index: 1;
 }
 
 .usinas-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: #f9f9f9; /* Fundo alternado para linhas pares */
 }
 
 .usinas-table tr:hover {
-  background-color: #f1f1f1; 
+  background-color: #f1f1f1; /* Destaque ao passar o mouse */
 }
 
 .usinas-table td {
   text-align: center;
-  color: #000000;
+  vertical-align: middle; /* Centraliza verticalmente o texto */
 }
 
 .no-data-message {

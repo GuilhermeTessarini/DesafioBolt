@@ -35,6 +35,10 @@ const MaioresGeradores = () => {
             <th>Nome da conexão</th>
             <th>Tensão de conexão</th>
             <th>Situação da obra</th>
+            <th>Data de geração do conjunto de dados</th>
+            <th>Data do RALIE</th>
+            <th>Código CEG da usina</th>
+            <th>Descrição do regime de participação</th>
           </tr>
         </thead>
         <tbody>
@@ -50,6 +54,10 @@ const MaioresGeradores = () => {
               <td>{usina.nomConexao}</td>
               <td>{usina.mdaTensaoConexao}</td>
               <td>{usina.dscSituacaoObra}</td>
+              <td>{usina.datGeracaoConjuntoDados}</td>
+              <td>{usina.datRalie}</td>
+              <td>{usina.codCEG}</td>
+              <td>{usina.dscPropriRegimePariticipacao}</td>
             </tr>
           ))}
         </tbody>
