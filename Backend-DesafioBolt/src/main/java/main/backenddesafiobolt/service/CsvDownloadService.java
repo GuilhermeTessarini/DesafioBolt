@@ -13,6 +13,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CsvDownloadService {
@@ -49,7 +52,7 @@ public class CsvDownloadService {
 
                 try {
                     Usina usina = getUsina(colunas);
-                    repository.save(usina);
+                    saveOrUpdateUsina(usina);
                 } catch (Exception e) {
                     System.err.println("[" + LocalDateTime.now().format(DATE_FORMATTER) + "] Erro ao processar linha: " + linha);
                     e.printStackTrace();
@@ -62,10 +65,24 @@ public class CsvDownloadService {
         }
     }
 
+    private void saveOrUpdateUsina(Usina usina) {
+        if (usina.getNumCnpjEmpresaConexao() == null || usina.getNumCnpjEmpresaConexao().isEmpty()) {
+            System.err.println("[" + LocalDateTime.now().format(DATE_FORMATTER) + "] CNPJ inválido, ignorando registro.");
+            return;
+        }
+
+        Optional<Usina> existingUsina = repository.findByNumCnpjEmpresaConexao(usina.getNumCnpjEmpresaConexao());
+
+        existingUsina.ifPresent(value -> usina.setId(value.getId()));
+
+        repository.save(usina);
+    }
+
     private static Usina getUsina(String[] colunas) {
         Usina usina = new Usina();
 
         usina.setDatGeracaoConjuntoDados(getValueSafe(colunas, 0));
+        usina.setDatRalie(getValueSafe(colunas, 1));
         usina.setCodCEG(getValueSafe(colunas, 3));
         usina.setSigUFPrincipal(getValueSafe(colunas, 4));
         usina.setDscOrigemCombustivel(getValueSafe(colunas, 5));
@@ -76,13 +93,14 @@ public class CsvDownloadService {
         usina.setDscTipoConexao(getValueSafe(colunas, 10));
         usina.setNomConexao(getValueSafe(colunas, 11));
         usina.setMdaTensaoConexao(getValueSafe(colunas, 12));
+        usina.setNumCnpjEmpresaConexao(getValueSafe(colunas, 14));
         usina.setDscSituacaoObra(getValueSafe(colunas, 16));
+
         return usina;
     }
 
     private static String getValueSafe(String[] colunas, int index) {
-        return (index < colunas.length && !colunas[index].isEmpty()) ?
-                colunas[index].trim() : null;
+        return (index < colunas.length && !colunas[index].isEmpty()) ? colunas[index].trim() : null;
     }
 
     private static BufferedReader getBufferedReader() throws IOException {
@@ -90,5 +108,6 @@ public class CsvDownloadService {
         return new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.ISO_8859_1));
     }
 }
+
 
 

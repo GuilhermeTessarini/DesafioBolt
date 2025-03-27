@@ -11,8 +11,11 @@ import org.hibernate.annotations.Comment;
 @AllArgsConstructor
 @Entity
 @Table(name = "usinas",
-        indexes = @Index(name = "idx_usina_potencia", columnList = "mda_potencia_outorgada_kw"))
-
+        indexes = {
+                @Index(name = "idx_usina_potencia", columnList = "mda_potencia_outorgada_kw"),
+                @Index(name = "idx_cnpj", columnList = "num_cnpj_empresa_conexao")
+        },
+        uniqueConstraints = @UniqueConstraint(columnNames = "num_cnpj_empresa_conexao"))
 public class Usina {
 
     @Id
@@ -23,6 +26,11 @@ public class Usina {
     @Column(name = "dat_geracao_conjunto_dados", length = 50)
     @Comment("Data de geração do conjunto de dados")
     private String datGeracaoConjuntoDados;
+
+    //DatRalie
+    @Column(name = "dat_ralie", length = 50)
+    @Comment("Data do Ralie")
+    private String datRalie;
 
     @Column(name = "cod_ceg", length = 21)
     @Comment("Código CEG da usina")
@@ -56,13 +64,17 @@ public class Usina {
     @Comment("Descrição do tipo de conexão")
     private String dscTipoConexao;
 
+    @Column(name = "mda_tensao_conexao", length = 50)
+    @Comment("Tensão de conexão")
+    private String mdaTensaoConexao;
+
     @Column(name = "nom_conexao", length = 200)
     @Comment("Nome da conexão")
     private String nomConexao;
 
-    @Column(name = "mda_tensao_conexao", length = 50)
-    @Comment("Tensão de conexão")
-    private String mdaTensaoConexao;
+    @Column(name = "num_cnpj_empresa_conexao", length = 14, unique = true)
+    @Comment("CNPJ da empresa de conexão")
+    private String numCnpjEmpresaConexao;
 
     @Column(name = "dsc_situacao_obra", length = 100)
     @Comment("Descrição da situação da obra")

@@ -8,9 +8,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UsinaRepository extends JpaRepository<Usina, Long> {
+    boolean existsByNumCnpjEmpresaConexao(String numCnpjEmpresaConexao);
+    Optional<Usina> findByNumCnpjEmpresaConexao(String numCnpjEmpresaConexao);
 
     @Modifying
     @Transactional
