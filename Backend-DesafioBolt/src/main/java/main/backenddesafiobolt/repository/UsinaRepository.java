@@ -12,20 +12,27 @@ import java.util.Optional;
 
 @Repository
 public interface UsinaRepository extends JpaRepository<Usina, Long> {
+
+    // Verifica se existe uma Usina com o CNPJ especificado
     boolean existsByNumCnpjEmpresaConexao(String numCnpjEmpresaConexao);
+
+    // Busca uma Usina pelo CNPJ
     Optional<Usina> findByNumCnpjEmpresaConexao(String numCnpjEmpresaConexao);
 
+    // Deleta todos os registros em lote
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM usinas", nativeQuery = true)
     void deleteAllInBatch();
 
-    // Para PostgreSQL:
+    // Reinicia a sequência de autoincremento do ID para 1
     @Modifying
     @Transactional
     @Query(value = "ALTER SEQUENCE usinas_id_seq RESTART WITH 1", nativeQuery = true)
     void resetAutoIncrement();
 
+    // Consulta as 5 usinas com maior potência outorgada
+    // Converte o formato brasileiro (1.234,56) para decimal antes de ordenar
     @Query(nativeQuery = true, value = """
         SELECT * FROM usinas
         WHERE mda_potencia_outorgada_kw IS NOT NULL

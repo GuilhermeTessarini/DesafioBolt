@@ -28,10 +28,15 @@ public class CsvDownloadService {
         this.repository = repository;
     }
 
+    /**
+     * Método agendado para executar a cada hora.
+     * Faz download de um CSV, processa os dados e persiste no banco.
+     */
     @Scheduled(cron = "0 0 * * * ?") // Executa a cada hora
     public void downloadAndProcessCsv() {
         try (BufferedReader reader = getBufferedReader()) {
 
+            // Limpa a tabela antes de inserir novos dados
             repository.deleteAllInBatch();
             repository.resetAutoIncrement();
 
@@ -44,8 +49,10 @@ public class CsvDownloadService {
                     continue;
                 }
 
+                // Split considerando aspas no conteúdo
                 String[] colunas = linha.split(";(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
 
+                // Remove aspas e espaços em branco
                 for (int i = 0; i < colunas.length; i++) {
                     colunas[i] = colunas[i].replaceAll("^\"|\"$", "").trim();
                 }
@@ -65,6 +72,10 @@ public class CsvDownloadService {
         }
     }
 
+    /**
+     * Salva ou atualiza um registro de Usina baseado no CNPJ.
+     * Ignora registros com CNPJ inválido.
+     */
     private void saveOrUpdateUsina(Usina usina) {
         if (usina.getNumCnpjEmpresaConexao() == null || usina.getNumCnpjEmpresaConexao().isEmpty()) {
             System.err.println("[" + LocalDateTime.now().format(DATE_FORMATTER) + "] CNPJ inválido, ignorando registro.");
@@ -78,6 +89,10 @@ public class CsvDownloadService {
         repository.save(usina);
     }
 
+    /**
+     * Mapeia um array de strings para um objeto Usina.
+     * Usa getValueSafe para evitar IndexOutOfBoundsException.
+     */
     private static Usina getUsina(String[] colunas) {
         Usina usina = new Usina();
 
@@ -99,10 +114,16 @@ public class CsvDownloadService {
         return usina;
     }
 
+    /**
+     * Retorna o valor do array na posição especificada ou null se inválido.
+     */
     private static String getValueSafe(String[] colunas, int index) {
         return (index < colunas.length && !colunas[index].isEmpty()) ? colunas[index].trim() : null;
     }
 
+    /**
+     * Cria um BufferedReader para ler o CSV remoto com encoding ISO-8859-1.
+     */
     private static BufferedReader getBufferedReader() throws IOException {
         URL url = new URL("https://dadosabertos.aneel.gov.br/dataset/57e4b8b5-a5db-40e6-9901-27ca629d0477/resource/4a615df8-4c25-48fa-bbea-873a36a79518/download/ralie-usina.csv");
         return new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.ISO_8859_1));
