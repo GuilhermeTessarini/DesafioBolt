@@ -26,13 +26,14 @@ public class CsvDownloadService {
     }
 
     @Scheduled(cron = "0 0 * * * ?") // Executa a cada hora
-    public void baixarEProcessarCsv() {
+    public void downloadAndProcessCsv() {
         try (BufferedReader reader = getBufferedReader()) {
+
+            repository.deleteAllInBatch();
+            repository.resetAutoIncrement();
+
             String linha;
             boolean primeiraLinha = true;
-            int linhasProcessadas = 0;
-
-            repository.deleteAll();
 
             while ((linha = reader.readLine()) != null) {
                 if (primeiraLinha) {
@@ -48,17 +49,12 @@ public class CsvDownloadService {
 
                 try {
                     Usina usina = getUsina(colunas);
-
                     repository.save(usina);
-                    linhasProcessadas++;
                 } catch (Exception e) {
                     System.err.println("[" + LocalDateTime.now().format(DATE_FORMATTER) + "] Erro ao processar linha: " + linha);
                     e.printStackTrace();
                 }
             }
-
-            System.out.println("[" + LocalDateTime.now().format(DATE_FORMATTER) + "] Processamento concluído. " +
-                    "Linhas processadas: " + linhasProcessadas);
 
         } catch (Exception e) {
             System.err.println("[" + LocalDateTime.now().format(DATE_FORMATTER) + "] Erro ao baixar/processar CSV: " + e.getMessage());

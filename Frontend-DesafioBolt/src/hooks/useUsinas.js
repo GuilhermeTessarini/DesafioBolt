@@ -7,14 +7,11 @@ export const useUsinas = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Iniciando busca de usinas...");
     const fetchUsinas = async () => {
       try {
         const data = await getMaioresGeradores();
-        console.log("Dados recebidos:", data);
         setUsinas(data);
       } catch (err) {
-        console.error("Erro detalhado:", err);
         setError(err.message);
       } finally {
         setLoading(false);

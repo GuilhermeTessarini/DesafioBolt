@@ -1,32 +1,93 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-  
-  .usinas-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-  
-  .usina-card {
-    background: #000000;
-    border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .error {
-    color: #ff0000;
-    text-align: center;
-  }
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #ffffff;
+  font-family: Arial, sans-serif;
+}
 
-  
+.container {
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #000000;
+}
+
+.usinas-table {
+  width: 80%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 1rem;
+  text-align: left;
+  background-color: #ffffff; 
+  color: #000000;
+}
+
+.usinas-table th,
+.usinas-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+}
+
+.usinas-table th {
+  background-color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  color: #000000;
+}
+
+.usinas-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.usinas-table tr:hover {
+  background-color: #f1f1f1; 
+}
+
+.usinas-table td {
+  text-align: center;
+  color: #000000;
+}
+
+.no-data-message {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #555555;
+  text-align: center;
+}
+
+.download-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.download-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  color: #ffffff;
+  background-color: #000000;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+}
+
+.download-message {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #28a745;
+  text-align: center;
+}
+
